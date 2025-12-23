@@ -1,12 +1,12 @@
 import os
 import streamlit as st
 
-from langchain_community.llms import Ollama
+from langchain_groq import ChatGroq
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_core.output_parsers import StrOutputParser
 
 # ================================
-# LangSmith Configuration (Secrets)
+# LangSmith Configuration
 # ================================
 os.environ["LANGCHAIN_API_KEY"] = st.secrets["LANGCHAIN_API_KEY"]
 os.environ["LANGCHAIN_TRACING_V2"] = "true"
@@ -25,13 +25,17 @@ prompt = ChatPromptTemplate.from_messages(
 # ================================
 # Streamlit UI
 # ================================
-st.title("LangChain Demo With LLAMA3 Model")
+st.title("LangChain Demo With LLaMA3 (Groq)")
 input_text = st.text_input("What question do you have in mind?")
 
 # ================================
-# Ollama LLaMA3 Model
+# Groq LLaMA3 Model
 # ================================
-llm = Ollama(model="llama3")
+llm = ChatGroq(
+    api_key=st.secrets["GROQ_API_KEY"],
+    model="llama3-70b-8192"
+)
+
 output_parser = StrOutputParser()
 chain = prompt | llm | output_parser
 
